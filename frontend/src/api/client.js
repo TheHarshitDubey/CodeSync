@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_BASE = 'https://codesync-backend-kzmj.onrender.com';
+const API_BASE = 'https://codesync-backend-kzmj.onrender.com/api';
 
 const client = axios.create({ baseURL: API_BASE });
 
