@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const WS_URL = 'http://localhost:8080/ws/collaboration';
+const WS_URL = 'https://codesync-backend-kzmj.onrender.com/ws/collaboration';
 
 /**
  * Creates a STOMP client connected over SockJS. Caller is responsible for
