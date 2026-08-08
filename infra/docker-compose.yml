@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: codesync-postgres
+    environment:
+      POSTGRES_DB: codesync
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - codesync-pg-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: codesync-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  codesync-pg-data:
