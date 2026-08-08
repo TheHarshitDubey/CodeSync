@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { getDocument, getRoom, executeCode } from '../api/client.js';
 import { createSocketClient, sendEdit, sendJoin, sendLeave } from '../api/socket.js';
@@ -8,6 +8,7 @@ const DEBOUNCE_MS = 300;
 
 export default function RoomPage() {
   const { roomCode } = useParams();
+  const navigate = useNavigate();
   const username = localStorage.getItem('username');
 
   const [code, setCode] = useState('');
@@ -98,6 +99,23 @@ export default function RoomPage() {
     }
   }
 
+  function handleLeaveRoom() {
+    if (clientRef.current && clientRef.current.connected) {
+      sendLeave(clientRef.current, roomCode, username);
+      clientRef.current.deactivate();
+    }
+    navigate('/');
+  }
+
+  function handleLogout() {
+    if (clientRef.current && clientRef.current.connected) {
+      sendLeave(clientRef.current, roomCode, username);
+      clientRef.current.deactivate();
+    }
+    localStorage.clear();
+    navigate('/login');
+  }
+
   return (
     <div className="cs-room-shell">
       <div className="cs-room-topbar">
@@ -122,6 +140,17 @@ export default function RoomPage() {
         <button className="cs-run-btn" onClick={handleRun} disabled={running}>
           {running ? 'Running...' : '▶ Run Code'}
         </button>
+
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="cs-btn cs-btn-ghost" style={{ width: 'auto', padding: '7px 14px', margin: 0, fontSize: 13 }}
+                  onClick={handleLeaveRoom}>
+            Leave Room
+          </button>
+          <button className="cs-btn cs-btn-ghost" style={{ width: 'auto', padding: '7px 14px', margin: 0, fontSize: 13 }}
+                  onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
       </div>
 
       <div style={{ flex: 1, display: 'flex' }}>
